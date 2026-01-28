@@ -9,7 +9,7 @@ async function loadJournals() {
         const journals = await response.json();
         displayJournals(journals);
     } else if (response.status === 401) {
-        window.location.href = 'index.html'; // Redirect to login if unauthorized
+        window.location.href = '/Journal/index.html'; // Redirect to login if unauthorized
     }
 }
 
@@ -74,7 +74,7 @@ async function updateEntry() {
 
 function logout() {
     localStorage.removeItem('journal_auth');
-    window.location.href = 'index.html';
+    window.location.href = '/Journal/index.html';
 }
 
 window.onload = loadJournals;
