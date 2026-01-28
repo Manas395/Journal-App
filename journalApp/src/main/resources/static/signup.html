@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Journal App | Signup</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex align-items-center" style="height: 100vh;">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 card shadow-sm p-4">
+            <h2 class="text-center mb-4">Create Account</h2>
+            <form id="signupForm">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Sign Up</button>
+            </form>
+            <p class="mt-3 text-center">Already have an account? <a href="index.html">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // These IDs must match the 'id' attributes in the input tags above
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+
+        // If either of these are null, the script crashes at .value
+        if (!usernameInput || !passwordInput) {
+            console.error("Could not find input elements in the HTML!");
+            return;
+        }
+
+        const user = {
+            userName: usernameInput.value, // CamelCase 'N' to match your Java Entity
+            password: passwordInput.value
+        };
+
+        try {
+            const response = await fetch('/Journal/public/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            });
+
+            if (response.ok) {
+                alert("Signup successful! Please login.");
+                window.location.href = 'index.html';
+            } else {
+                const errorMsg = await response.text();
+                alert("Signup failed: " + errorMsg);
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            alert("Server error. Check IntelliJ console.");
+        }
+    });
+</script>
+</body>
+</html>
