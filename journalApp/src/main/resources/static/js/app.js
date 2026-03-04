@@ -1,5 +1,14 @@
 const auth = localStorage.getItem('journal_auth');
 
+const rolesString = localStorage.getItem('journal_roles');
+if (rolesString) {
+    const roles = JSON.parse(rolesString);
+    if (roles.includes('ADMIN')) {
+        // Remove the 'd-none' (display: none) class from Bootstrap
+        document.getElementById('adminPanelBtn').classList.remove('d-none');
+    }
+}
+
 // 1. READ: Fetch all journals
 async function loadJournals() {
     const response = await fetch('/Journal/journal', {

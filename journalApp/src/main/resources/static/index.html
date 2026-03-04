@@ -2,54 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Journal App | Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: #f8f9fa; display: flex; align-items: center; height: 100vh; }
-        .login-card { width: 100%; max-width: 400px; padding: 15px; margin: auto; }
-    </style>
 </head>
-<body>
-<div class="login-card">
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <h2 class="text-center mb-4">Welcome Back</h2>
+<body class="bg-light d-flex align-items-center" style="height: 100vh;">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 card shadow-sm p-4">
+            <h2 class="text-center mb-4">Login</h2>
+
             <form id="loginForm">
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" id="username" class="form-control" required placeholder="Enter username">
+                    <input type="text" id="username" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" id="password" class="form-control" required placeholder="Enter password">
+                    <input type="password" id="password" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Login to Journal</button>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
-            <div id="message" class="mt-3 text-danger text-center"></div>
+
+            <p class="mt-3 text-center">Don't have an account? <a href="signup.html">Sign Up</a></p>
         </div>
     </div>
 </div>
 
 <script>
+    // We listen for the user to click the "Login" button
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
+        e.preventDefault(); // Prevents the page from refreshing
 
-        // Simple Auth storage for demo purposes
-        const authHeader = 'Basic ' + btoa(user + ':' + pass);
+        // Get the values the user typed in
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-        // Verify credentials with a simple test call to your backend
-        const response = await fetch('/Journal/journal', {
-            headers: { 'Authorization': authHeader }
-        });
+        // 1. Create the Security Key
+        const authString = 'Basic ' + btoa(username + ':' + password);
 
-        if (response.ok) {
-            localStorage.setItem('journal_auth', authHeader);
-            window.location.href = 'dashboard.html';
-        } else {
-            document.getElementById('message').innerText = "Invalid credentials. Try again.";
+        try {
+            // 2. Call the Backend (Make sure your UserController has this /me endpoint!)
+            const response = await fetch('/Journal/user/me', {
+                method: 'GET',
+                headers: { 'Authorization': authString }
+            });
+
+            // 3. Check the Result
+            if (response.ok) {
+                const userData = await response.json();
+
+                // 4. Save the Session State
+                localStorage.setItem('journal_auth', authString);
+                localStorage.setItem('journal_roles', JSON.stringify(userData.roles));
+
+                // 5. The "Traffic Cop" (Role-Based Routing)
+                if (userData.roles && userData.roles.includes('ADMIN')) {
+                    window.location.href = '/Journal/admin.html'; // Direct to admin panel
+                } else {
+                    window.location.href = '/Journal/dashboard.html'; // Direct to normal dashboard
+                }
+            } else {
+                // 6. Handle Failures
+                alert("Invalid credentials! Please check your username and password.");
+            }
+        } catch (error) {
+            console.error("Login error:", error);
+            alert("Could not connect to the server.");
         }
     });
 </script>
