@@ -30,7 +30,9 @@ public class SpringSecurity {
                         .requestMatchers("/journal/**", "/user/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(basic -> basic.authenticationEntryPoint(
+                        (request, response, authException) -> response.sendError(401)
+                ))
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
