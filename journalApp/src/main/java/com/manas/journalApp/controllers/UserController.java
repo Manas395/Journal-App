@@ -37,4 +37,13 @@ public class UserController {
         userRepository.deleteByUserName(authentication.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @GetMapping("/me")
+    public ResponseEntity<User> getMyProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userService.findByUserName(userName);
+        // Erase the password before sending it to the frontend!
+        user.setPassword("");
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 }
