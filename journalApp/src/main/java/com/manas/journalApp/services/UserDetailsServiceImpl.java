@@ -1,7 +1,7 @@
 package com.manas.journalApp.services;
 
-import com.manas.journalApp.Repositories.UserRepository;
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.repositories.UserRepository;
+import com.manas.journalApp.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

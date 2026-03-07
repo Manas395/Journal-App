@@ -1,8 +1,7 @@
 package com.manas.journalApp.controllers;
 
-import com.manas.journalApp.JournalApplication;
-import com.manas.journalApp.entity.JournalEntry;
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.entities.JournalEntry;
+import com.manas.journalApp.entities.User;
 import com.manas.journalApp.services.JournalEntryService;
 import com.manas.journalApp.services.UserService;
 import org.bson.types.ObjectId;
@@ -13,9 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/journal")

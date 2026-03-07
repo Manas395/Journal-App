@@ -1,7 +1,7 @@
 package com.manas.journalApp.controllers;
 
 
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.entities.User;
 import com.manas.journalApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

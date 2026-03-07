@@ -1,4 +1,4 @@
-package com.manas.journalApp.entity;
+package com.manas.journalApp.entities;
 
 import lombok.*;
 import org.bson.types.ObjectId;

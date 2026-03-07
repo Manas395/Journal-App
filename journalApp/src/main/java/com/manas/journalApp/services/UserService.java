@@ -1,7 +1,7 @@
 package com.manas.journalApp.services;
 
-import com.manas.journalApp.Repositories.UserRepository;
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.repositories.UserRepository;
+import com.manas.journalApp.entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,7 @@ public class UserService {
             userRepository.save(user);
             return true;
         }catch(Exception e){
+            log.error("Error occurred for the user : {}", user.getUserName(),e);
             return false;
         }
     }

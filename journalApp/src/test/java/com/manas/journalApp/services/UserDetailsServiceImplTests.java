@@ -1,15 +1,12 @@
 package com.manas.journalApp.services;
 
-import com.manas.journalApp.Repositories.UserRepository;
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.repositories.UserRepository;
+import com.manas.journalApp.entities.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.ArrayList;
 

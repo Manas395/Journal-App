@@ -1,7 +1,7 @@
 package com.manas.journalApp.services;
 
-import com.manas.journalApp.Repositories.UserRepository;
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.repositories.UserRepository;
+import com.manas.journalApp.entities.User;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

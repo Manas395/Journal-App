@@ -3,7 +3,7 @@ package com.manas.journalApp.services;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.entities.User;
 
 import java.util.stream.Stream;
 

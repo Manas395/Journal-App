@@ -1,8 +1,8 @@
 package com.manas.journalApp.services;
 
-import com.manas.journalApp.Repositories.JournalEntryRepository;
-import com.manas.journalApp.entity.JournalEntry;
-import com.manas.journalApp.entity.User;
+import com.manas.journalApp.repositories.JournalEntryRepository;
+import com.manas.journalApp.entities.JournalEntry;
+import com.manas.journalApp.entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
