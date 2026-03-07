@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: journaldb
+      auto-index-creation: true
+  main:
+    allow-circular-references: true
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /Journal
+
+
