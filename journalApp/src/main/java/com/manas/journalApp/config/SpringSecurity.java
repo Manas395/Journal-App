@@ -24,8 +24,7 @@ public class SpringSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/index.html", "/signup.html", "/dashboard.html", "/editor.html").permitAll()
-                        .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/signup.html", "/dashboard.html", "/editor.html", "/admin.html").permitAll()                        .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/journal/**", "/user/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
