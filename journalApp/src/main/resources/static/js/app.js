@@ -10,16 +10,46 @@ if (rolesString) {
 }
 
 // 1. READ: Fetch all journals
-async function loadJournals() {
-    const response = await fetch('/Journal/journal', {
-        headers: { 'Authorization': auth }
-    });
-    if (response.ok) {
-        const journals = await response.json();
-        displayJournals(journals);
-    } else if (response.status === 401) {
-        window.location.href = '/Journal/index.html'; // Redirect to login if unauthorized
+// This function runs on page load and when the user clicks "Apply Filter"
+function loadJournals() {
+    const authHeader = localStorage.getItem('journal_auth'); // Or however you store your Basic Auth string
+    const datePicker = document.getElementById('journalDatePicker');
+    const selectedDate = datePicker ? datePicker.value : ""; // Captures "YYYY-MM-DD"
+
+    // 1. Construct the URL dynamically based on whether a date is selected
+    let url = '/Journal/journal';
+    if (selectedDate) {
+        url += `?date=${selectedDate}`;
     }
+
+    // 2. Fire the fetch request to your single backend endpoint
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': authHeader,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch journal entries');
+        }
+        return response.json();
+    })
+    .then(journals => {
+        // 3. Pass the array (either full or filtered) to your rendering function
+        displayJournals(journals);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Could not load journals.');
+    });
+}
+
+// Helper function to clear the input and refresh back to "show all"
+function clearDateFilter() {
+    document.getElementById('journalDatePicker').value = "";
+    loadJournals(); // Calling this with an empty input loads everything
 }
 
 function displayJournals(journals) {

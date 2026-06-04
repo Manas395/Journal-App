@@ -12,7 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/journal")
@@ -25,32 +28,46 @@ public class JournalEntryController2 {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<JournalEntry>> getAllJournalEntriesOfUser() {
+    public ResponseEntity<List<JournalEntry>> getAllJournalEntriesOfUser(@RequestParam(required = false) String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUserName(userName);
         List<JournalEntry> all = user.getJournalEntries();
 
-        if (all != null && !all.isEmpty()) {
+        if (all == null || all.isEmpty()) {
             return new ResponseEntity<>(all, HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        if(date != null && !date.isBlank()){
+            LocalDate date1 = LocalDate.parse(date);
+            List<JournalEntry> filtered = all.stream()
+                    .filter(x -> x.getDate() != null && x.getDate().toLocalDate().equals(date1))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(filtered, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
     @GetMapping("/id/{myId}")
-    public ResponseEntity<JournalEntry> getEntryById(@PathVariable ObjectId myId){
+    public ResponseEntity<JournalEntry> getEntryById(@PathVariable ObjectId myId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUserName(userName);
-        List<JournalEntry> collect = user.getJournalEntries().stream().filter(x -> x.getId().equals(myId)).toList();
-        if(!collect.isEmpty()) {
-            Optional<JournalEntry> journalEntry = journalEntryService.getEntryById(myId);
-            if (journalEntry.isPresent()) {
-                return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
-            }
+
+        // 1. Find the entry directly in the user's existing list using short-circuit evaluation
+        Optional<JournalEntry> matchingEntry = user.getJournalEntries()
+                .stream()
+                .filter(x -> myId.equals(x.getId()))
+                .findFirst(); // Stops processing immediately when found
+
+        // 2. If present, return it directly. No secondary database hit needed!
+        if (matchingEntry.isPresent()) {
+            return new ResponseEntity<>(matchingEntry.get(), HttpStatus.OK);
         }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
 
     @PostMapping
