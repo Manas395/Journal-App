@@ -88,8 +88,9 @@ public class JournalEntryController2 {
     }
 
 
-    @DeleteMapping("/id/{myId}")
-    public ResponseEntity<?> deleteEntryById(@PathVariable ObjectId myId){
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<?> deleteEntryById(@PathVariable String id){
+        ObjectId myId = new ObjectId(id);
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
          String userName = authentication.getName();
         boolean removed = journalEntryService.deleteEntryById(myId, userName);
@@ -97,8 +98,9 @@ public class JournalEntryController2 {
         return removed ? new ResponseEntity<>(HttpStatus.NO_CONTENT): new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/id/{myId}")
-    public ResponseEntity<JournalEntry> updateEntryById(@PathVariable ObjectId myId, @RequestBody JournalEntry newEntry) {
+    @PutMapping("/id/{id}")
+    public ResponseEntity<JournalEntry> updateEntryById(@PathVariable String id, @RequestBody JournalEntry newEntry) {
+        ObjectId myId = new ObjectId(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUserName(userName);
